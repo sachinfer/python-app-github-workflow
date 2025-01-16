@@ -32,26 +32,17 @@ jobs:
         id: short_sha
         run: echo "SHORT_SHA=$(echo $GITHUB_SHA | head -c 8)" >> $GITHUB_ENV
 
-      # Step 5: Get the current date in UTC format
+      # Step 5: Get the current date in UTC format (formatted as YYYY-MM-DD)
       - name: Get date
         id: date_time
         run: echo "DATE_TIME=$(date -u +'%Y-%m-%d')" >> $GITHUB_ENV
 
-      # Step 6: Retrieve or initialize the version counter for the day
-      - name: Retrieve version counter
-        id: version_counter
-        run: |
-          VERSION_FILE="version_counter.txt"
-          if [[ -f "$VERSION_FILE" ]]; then
-            VERSION=$(cat "$VERSION_FILE")
-            VERSION=$((VERSION + 1))
-          else
-            VERSION=1
-          fi
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo $VERSION > "$VERSION_FILE"
+      # Step 6: Get the current time in UTC format (formatted as HH-MM-SS)
+      - name: Get time
+        id: current_time
+        run: echo "TIME=$(date -u +'%H-%M-%S')" >> $GITHUB_ENV
 
-      # Step 7: Build and push Docker image with dynamic tags
+      # Step 7: Build and push Docker image with dynamic tags (date and time)
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
@@ -61,4 +52,4 @@ jobs:
             sachinfe/app:latest
             sachinfe/app:${{ github.ref_name }}
             sachinfe/app:${{ env.SHORT_SHA }}
-            sachinfe/app:${{ github.ref_name }}-${{ env.DATE_TIME }}-v${{ env.VERSION }}
+            sachinfe/app:${{ github.ref_name }}-${{ env.DATE_TIME }}-${{ env.TIME }}
