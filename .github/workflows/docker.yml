@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: python-docker
 
     steps:
       # Step 1: Checkout the repository code
