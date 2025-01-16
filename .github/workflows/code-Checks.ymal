@@ -1,0 +1,94 @@
+name: Code Review Checks
+
+on:
+  pull_request:
+    branches:
+      - main  # Trigger this workflow when a pull request is made to the main branch
+
+jobs:
+  check_dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python (if your project is Python-based)
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # Adjust to your required Python version
+
+      # Step 3: Install dependencies (if you have a requirements.txt or similar)
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Adjust if your project uses another dependency manager
+
+      # Step 4: Run dependency checks
+      - name: Check dependencies
+        run: |
+          pip check  # For Python dependencies. Adjust for your project type if it's not Python
+
+  lint_code:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python (if your project is Python-based)
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # Adjust to your required Python version
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Adjust if your project uses another dependency manager
+
+      # Step 4: Lint the code
+      - name: Run linters (e.g., Flake8 for Python)
+        run: |
+          pip install flake8
+          flake8 .  # You can replace this with other linters or tools for different languages
+
+  run_tests:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Python (if your project is Python-based)
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # Adjust to your required Python version
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Adjust if your project uses another dependency manager
+
+      # Step 4: Run unit tests
+      - name: Run unit tests
+        run: |
+          pytest  # Replace with your test command (e.g., 'npm test' for Node.js, 'mvn test' for Java)
+        
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Build the project (e.g., Docker image, package, etc.)
+      - name: Build Docker image (if applicable)
+        run: |
+          docker build -t sachinfe/app:review-${{ github.sha }} .
+          
+      # Step 3: Optionally, you can add steps to publish the build or log output for further analysis
