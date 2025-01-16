@@ -34,4 +34,5 @@ jobs:
           push: true
           tags: |
             sachinfe/app:latest
-            sachinfe/app:${{ github.sha }}
+            sachinfe/app:${{ github.ref_name }}
+            achinfe/app:${{ github.sha::8 }} 
