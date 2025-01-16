@@ -35,4 +35,4 @@ jobs:
           tags: |
             sachinfe/app:latest
             sachinfe/app:${{ github.ref_name }}
-            achinfe/app:${{ github.sha::8 }} 
+            sachinfe/app:${{ github.sha }}
