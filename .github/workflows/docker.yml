@@ -41,16 +41,17 @@ jobs:
       - name: Retrieve version counter
         id: version_counter
         run: |
-          if [[ -f version_counter.txt ]]; then
-            VERSION=$(cat version_counter.txt)
+          VERSION_FILE="version_counter.txt"
+          if [[ -f "$VERSION_FILE" ]]; then
+            VERSION=$(cat "$VERSION_FILE")
             VERSION=$((VERSION + 1))
           else
             VERSION=1
           fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo $VERSION > version_counter.txt
+          echo $VERSION > "$VERSION_FILE"
 
-      # Step 7: Build and push Docker image
+      # Step 7: Build and push Docker image with dynamic tags
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
